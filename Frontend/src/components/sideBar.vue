@@ -7,7 +7,7 @@
                     <q-toolbar-title>Store Control</q-toolbar-title>
                 </q-toolbar>
             </q-header>
-            <q-drawer v-model="drawer" show-if-above :width="200" :breakpoint="700" elevated class="bg-grey-3">
+            <q-drawer v-model="drawer" show-if-above :width="250" :breakpoint="700" elevated class="bg-grey-3">
                 <q-scroll-area class="fit">
                     <q-list bordered>
                         <router-link to="/" class="link">
@@ -18,22 +18,28 @@
                                 <q-item-section>Home</q-item-section>
                             </q-item>
                         </router-link>
-                        <router-link to="/teste" class="link">
-                            <q-item clickable v-ripple>
-                                <q-item-section avatar>
-                                    <q-icon color="primary" class="fa-solid fa-user-gear"></q-icon>
-                                </q-item-section>
-                                <q-item-section>Teste</q-item-section>
-                            </q-item>
-                        </router-link>
-                        <router-link to="/relatorio" class="link">
-                            <q-item clickable v-ripple>
-                                <q-item-section avatar>
-                                    <q-icon color="primary" class="fa-solid fa-bullseye"></q-icon>
-                                </q-item-section>
-                                <q-item-section>Metas</q-item-section>
-                            </q-item>
-                        </router-link>
+                        <div>
+                            <q-expansion-item header-class="text-primary" expand-separator icon="fa-solid fa-pen-to-square"
+                                label="Cadastrar">
+                                <router-link to="/employee" class="link">
+                                    <q-item clickable v-ripple>
+                                        <q-item-section avatar>
+                                            <q-icon color="employees" class="fa-solid fa-user-group"></q-icon>
+                                        </q-item-section>
+                                        <q-item-section>Funcionários</q-item-section>
+                                    </q-item>
+                                </router-link>
+                                <router-link to="/targets" class="link">
+                                    <q-item clickable v-ripple>
+                                        <q-item-section avatar>
+                                            <q-icon color="primary" class="fa-regular fa-calendar-check"></q-icon>
+                                        </q-item-section>
+                                        <q-item-section>Metas</q-item-section>
+                                    </q-item>
+                                </router-link>
+                            </q-expansion-item>
+                        </div>
+
                     </q-list>
                 </q-scroll-area>
             </q-drawer>
@@ -58,6 +64,7 @@ export default {
 
 <style scoped>
 .link {
+    color: #1976D2;
     text-decoration: none;
 }
 </style>
