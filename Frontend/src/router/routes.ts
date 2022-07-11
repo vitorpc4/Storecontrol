@@ -1,7 +1,7 @@
 import { RouteRecordRaw } from 'vue-router';
 import InitialView from '../views/InitialView.vue';
-import TestandoItem from '../views/TestandoItem.vue';
-
+import registerEmploye from '../pages/employee/registerEmployeeModal.vue';
+import employee from '../pages/employee/employeePage.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -10,9 +10,9 @@ const routes: RouteRecordRaw[] = [
     component: InitialView,
   },
   {
-    path: '/teste',
-    name: 'testando',
-    component: TestandoItem,
+    path: '/employee',
+    name: 'employee',
+    component: employee,
   }
 
 ];
