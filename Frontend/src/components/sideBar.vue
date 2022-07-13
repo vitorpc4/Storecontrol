@@ -1,6 +1,6 @@
 <template>
     <div class="">
-        <q-layout view="hHh Lpr lff" container style="height: 54em" class="shadow-2">
+        <q-layout view="hHh Lpr lff" container style="height: 100vh" class="shadow-2">
             <q-header elevated class="bg-black">
                 <q-toolbar>
                     <q-btn flat @click="drawer = !drawer" round dense icon="menu" />

@@ -2,7 +2,7 @@
   <div class="q-pa-md">
     <div class="column">
       <q-btn color="primary" icon-right="fa-regular fa-square-plus" label="Cadastrar" class="col self-end q-mb-sm"
-        @click="registerEmployee" />
+        @click="changeVisibilityDialog" />
     </div>
     <q-table :rows="rows" row-key="name">
       <template v-slot:body="props">
@@ -17,12 +17,20 @@
         </q-tr>
       </template>
     </q-table>
-    <RegisterEmployeeModal :show="teste" @close-modal="closeModal"></RegisterEmployeeModal>
+    <div class="q-pa-md q-gutter-sm">
+      <q-dialog v-model="qDialogVisibility" full-width>
+        <RegisterEmployeeModal @qDialogVisibility="changeVisibilityDialog"></RegisterEmployeeModal>
+      </q-dialog>
+    </div>
+    
+      
+    
+    
   </div>
 </template>
 
 <script>
-import { computed, defineComponent, ref } from 'vue'
+import { defineComponent, ref } from 'vue'
 import RegisterEmployeeModal from './registerEmployeeModal.vue'
 const rows = [
   {
@@ -46,32 +54,16 @@ const rows = [
 ]
 export default defineComponent({
   setup() {
-    const varteste = ref(false)
-    const teste = computed({
-      get: () => {
-        return varteste.value;
-      },
-      set: (v) => {
-        console.log(v)
-        varteste.value = v
-      },
-    })
+    const qDialogVisibility = ref(false)
 
-
-    const registerEmployee = () => {
-      teste.value = !teste.value
-    };
-
-    const closeModal = () => {
-      teste.value = !teste.value
+    const changeVisibilityDialog = () =>{
+      qDialogVisibility.value = !qDialogVisibility.value
     }
 
     return {
       rows,
-      teste,
-      closeModal,
-      registerEmployee
-
+      qDialogVisibility,
+      changeVisibilityDialog
     };
   },
   components: { RegisterEmployeeModal }

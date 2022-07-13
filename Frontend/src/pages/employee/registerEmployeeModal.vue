@@ -1,32 +1,31 @@
 <template>
-  <div class="q-pa-md q-gutter-sm">
-    <q-dialog v-model="$props.show" persistent full-width>
-      <q-card>
-        <q-card-section>
-          <div class="text-h6">Full Width</div>
-        </q-card-section>
+      <div>
+          <q-card>
+            <q-card-section>
+              <div class="text-h6">Full Width</div>
+            </q-card-section>
 
-        <q-card-section class="q-pt-none">
-          Click/Tap on the backdrop.
-        </q-card-section>
+            <q-card-section class="q-pt-none">
+              Click/Tap on the backdrop.
+            </q-card-section>
 
-        <q-card-actions align="right" class="bg-white text-teal">
-          <q-btn flat label="OK" @click="teste" />
-          <q-btn flat label="CANCELAR" @click="teste" />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
-  </div>
+            <q-card-actions align="right" class="bg-white text-teal">
+              <q-btn flat label="OK" @click="teste" />
+              <q-btn flat label="CANCELAR" @click="teste" />
+            </q-card-actions>
+          </q-card>
+      </div>
+      
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, toRefs } from 'vue';
 import { useEmployeeStore } from '../../stores/EmployeeStore'
-import IEmploye from 'src/interfaces/Employe';
+import IEmploye from '../../interfaces/Employe';
 
 export default defineComponent({
   name: 'registerEmploye',
-  emits: ['closeModal'],
+  emits: ['qDialogVisibility'],
   props: {
     show: {
       type: Boolean,
@@ -47,7 +46,7 @@ export default defineComponent({
 
 
     const teste = () => {
-      emit('closeModal', !show.value)
+      emit('qDialogVisibility', !show.value)
       console.log(show.value)
     }
 
