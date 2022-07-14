@@ -12,6 +12,12 @@ export const useEmployeeStore = defineStore({
       Employees: [],
     } as StateEmployee),
 
+  getters: {
+    getEmployess(state) {
+      return state.Employees;
+    },
+  },
+
   actions: {
     createNewEmployee(item: IEmploye) {
       if (!item) return;
