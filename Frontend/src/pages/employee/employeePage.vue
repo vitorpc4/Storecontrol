@@ -4,7 +4,7 @@
       <q-btn color="primary" icon-right="fa-regular fa-square-plus" label="Cadastrar" class="col self-end q-mb-sm"
         @click="changeVisibilityDialog" />
     </div>
-    <q-table :rows="rows" row-key="name">
+    <q-table :rows="useEmployee.getEmployess" row-key="name">
       <template v-slot:body="props">
         <q-tr :props="props">
           <q-td v-for="col in props.cols" :key="col.name" :props="props">
@@ -18,52 +18,42 @@
       </template>
     </q-table>
     <div class="q-pa-md q-gutter-sm">
-      <q-dialog v-model="qDialogVisibility" full-width>
-        <RegisterEmployeeModal @qDialogVisibility="changeVisibilityDialog"></RegisterEmployeeModal>
+      <q-dialog v-model="qDialogVisibility">
+        <RegisterEmployeeModal @save-employee="saveEmployee" @qDialogVisibility="changeVisibilityDialog">
+        </RegisterEmployeeModal>
       </q-dialog>
     </div>
-    
-      
-    
-    
+
+
+
+
   </div>
 </template>
 
 <script>
+import { useEmployeeStore } from 'src/stores/EmployeeStore'
 import { defineComponent, ref } from 'vue'
 import RegisterEmployeeModal from './registerEmployeeModal.vue'
-const rows = [
-  {
-    name: 'João da silva',
-    jobTitle: 'Vendedor',
-    birthDate: '05/04/2000',
-    filingDate: '10/07/2019'
-  },
-  {
-    name: 'João da silva',
-    jobTitle: 'Vendedor',
-    birthDate: '05/04/1999',
-    filingDate: '10/07/2019'
-  },
-  {
-    name: 'João da silva',
-    jobTitle: 'Vendedor',
-    birthDate: '05/04/2000',
-    filingDate: '10/07/2019'
-  },
-]
+
 export default defineComponent({
   setup() {
     const qDialogVisibility = ref(false)
+    const useEmployee = useEmployeeStore()
 
-    const changeVisibilityDialog = () =>{
+    const changeVisibilityDialog = () => {
+      qDialogVisibility.value = !qDialogVisibility.value
+    }
+
+    const saveEmployee = (employee) => {
+      useEmployee.createNewEmployee(employee)
       qDialogVisibility.value = !qDialogVisibility.value
     }
 
     return {
-      rows,
       qDialogVisibility,
-      changeVisibilityDialog
+      changeVisibilityDialog,
+      useEmployee,
+      saveEmployee
     };
   },
   components: { RegisterEmployeeModal }
