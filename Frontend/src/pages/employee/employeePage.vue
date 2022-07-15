@@ -18,7 +18,7 @@
       </template>
     </q-table>
     <div class="q-pa-md q-gutter-sm">
-      <q-dialog v-model="qDialogVisibility" >
+      <q-dialog v-model="qDialogVisibility">
         <RegisterEmployeeModal @save-employee="saveEmployee" @qDialogVisibility="changeVisibilityDialog">
         </RegisterEmployeeModal>
       </q-dialog>
