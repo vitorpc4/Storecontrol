@@ -5,7 +5,7 @@
         <div class="text-h6">Cadastrar funcionário</div>
       </q-card-section>
       <q-card-section>
-        <div class="q-pa-md">
+        <div class="q-pl-md">
           <div class="q-gutter-lg row items-start">
             <q-input class="col-5" v-model="name" outlined label="Nome"/>
             <q-input class="col-5" v-model="jobTitle" outlined label="Cargo" />
@@ -64,9 +64,10 @@ export default defineComponent({
     const jobTitle = ref('');
     const birthDate = ref((actualDate.getFullYear() + '/' + ('0' + (actualDate.getMonth() + 1)).slice(-2) + '/' + ('0' + actualDate.getDate()).slice(-2)).toString());
     const filingDate = ref((actualDate.getFullYear() + '/' + ('0' + (actualDate.getMonth() + 1)).slice(-2) + '/' + ('0' + actualDate.getDate()).slice(-2)).toString());
-
     const addEmployee = (): void => {
+      const id = Math.floor(Math.random() * 10) + 1;
       emit('saveEmployee', {
+        id: id,
         name: name,
         jobTitle: jobTitle,
         birthDate: birthDate,
