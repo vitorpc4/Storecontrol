@@ -7,14 +7,14 @@
       <q-card-section>
         <div class="q-pl-md">
           <div class="q-gutter-lg row items-start">
-            <q-input class="col-5" v-model="name" outlined label="Nome"/>
+            <q-input class="col-5" v-model="name" outlined label="Nome" />
             <q-input class="col-5" v-model="jobTitle" outlined label="Cargo" />
             <q-input class="col-5" filled v-model="birthDate" label="Data de nascimento" mask="date" :rules="['date']">
               <template v-slot:append>
                 <q-icon name="event" class="cursor-pointer">
                   <q-popup-proxy cover transition-show="scale" transition-hide="scale">
                     <q-date v-model="birthDate">
-                        <q-btn v-close-popup label="Close" color="primary" flat />
+                      <q-btn v-close-popup label="Close" color="primary" flat />
                     </q-date>
                   </q-popup-proxy>
                 </q-icon>
@@ -38,7 +38,7 @@
       </q-card-section>
       <div class="row justify-end">
         <q-card-actions class="bg-white text-teal q-mr-xl">
-          <q-btn flat label="OK" @click="addEmployee" />
+          <q-btn flat label="OK" @click="save" />
           <q-btn flat label="CANCELAR" @click="closeDialog" />
         </q-card-actions>
       </div>
@@ -50,29 +50,56 @@
 </template>
 
 <script lang="ts">
+import { useEmployeeStore } from 'src/stores/EmployeeStore';
 import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'registerEmploye',
-  emits: ['qDialogVisibility', 'saveEmployee'],
+  emits: ['qDialogVisibility', 'saveEmployee', 'saveEditEmployee'],
+  props: {
+    id: {
+      type: Number,
+      required: true
+    }
+  },
 
   setup(props, { emit }) {
 
-
+    const useStoreEmployee = useEmployeeStore();
     const actualDate = new Date;
     const name = ref('');
     const jobTitle = ref('');
     const birthDate = ref((actualDate.getFullYear() + '/' + ('0' + (actualDate.getMonth() + 1)).slice(-2) + '/' + ('0' + actualDate.getDate()).slice(-2)).toString());
     const filingDate = ref((actualDate.getFullYear() + '/' + ('0' + (actualDate.getMonth() + 1)).slice(-2) + '/' + ('0' + actualDate.getDate()).slice(-2)).toString());
-    const addEmployee = (): void => {
-      const id = Math.floor(Math.random() * 10) + 1;
-      emit('saveEmployee', {
-        id: id,
-        name: name,
-        jobTitle: jobTitle,
-        birthDate: birthDate,
-        filingDate: filingDate
-      });
+    if (props.id) {
+      const employeefind = useStoreEmployee.$state.Employees.find(p => p.id == props.id)
+      name.value = employeefind?.name || '';
+      jobTitle.value = employeefind?.jobTitle || '';
+      birthDate.value = employeefind?.birthDate.toString() || '';
+      filingDate.value = employeefind?.filingDate.toString() || '';
+    }
+
+    const save = (): void => {
+      console.log(props.id)
+      if (props.id > 0) {
+        emit('saveEditEmployee', {
+          id: props.id,
+          name: name,
+          jobTitle: jobTitle,
+          birthDate: birthDate,
+          filingDate: filingDate
+        })
+      } else {
+        const id = Math.floor(Math.random() * 10) + 1;
+        emit('saveEmployee', {
+          id: id,
+          name: name,
+          jobTitle: jobTitle,
+          birthDate: birthDate,
+          filingDate: filingDate
+        })
+      }
+
     }
 
     const closeDialog = () => {
@@ -83,7 +110,7 @@ export default defineComponent({
       jobTitle,
       birthDate,
       filingDate,
-      addEmployee,
+      save,
       closeDialog,
     };
   },
