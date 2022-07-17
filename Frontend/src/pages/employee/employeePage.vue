@@ -11,7 +11,7 @@
             {{ col.value }}
           </q-td>
           <q-td auto-width>
-            <q-btn round color="primary" @click="editEmployee(props.row.id)" size="sm" class="q-mr-sm"
+            <q-btn round color="primary" size="sm" class="q-mr-sm" @click="editEmployee(props.row.id)"
               icon="fa-solid fa-pencil" />
             <q-btn round color="red" size="sm" icon="fa-solid fa-trash" @click="removeEmployee(props.row.id)" />
           </q-td>
@@ -20,51 +20,49 @@
     </q-table>
     <div class="q-pa-md q-gutter-sm">
       <q-dialog v-model="qDialogVisibility">
-        <RegisterEmployeeModal :id="idProjeto" @save-employee="saveEmployee" @save-edit-employee="saveEditEmployee"
-          @qDialogVisibility="changeVisibilityDialog">
+        <RegisterEmployeeModal :id="idProjeto" @q-dialog-visibility="changeVisibilityDialog">
         </RegisterEmployeeModal>
       </q-dialog>
     </div>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { useEmployeeStore } from 'src/stores/EmployeeStore'
-import { computed, defineComponent, ref } from 'vue'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import RegisterEmployeeModal from './registerEmployeeModal.vue'
 
 export default defineComponent({
   setup() {
     const qDialogVisibility = ref(false)
     const useEmployee = useEmployeeStore()
-    const Employees = computed(() => useEmployee.getEmployees)
-    let idProjeto = ref(Number)
-    idProjeto.value = 0;
+    const idProjeto = ref(0)
 
     const visibleColumns = ref(['name', 'jobTitle', 'birthDate', 'filingDate'])
+    const Employees = computed(() => useEmployee.getEmployees)
+
+    onMounted(() => {
+      useEmployee.fetchEmployees();
+    })
 
     const changeVisibilityDialog = () => {
-      qDialogVisibility.value = !qDialogVisibility.value
-    }
-
-    const removeEmployee = (id) => {
-      useEmployee.removeEmployee(id)
-    }
-
-    const saveEmployee = (employee) => {
-      useEmployee.createNewEmployee(employee)
-      qDialogVisibility.value = !qDialogVisibility.value
-    }
-
-    const editEmployee = (id) => {
-      idProjeto.value = id
-      qDialogVisibility.value = !qDialogVisibility.value
-    }
-
-    const saveEditEmployee = (employee) => {
-      useEmployee.editEmployee(employee);
       idProjeto.value = 0
       qDialogVisibility.value = !qDialogVisibility.value
+      useEmployee.fetchEmployees();
+    }
+
+    const editEmployee = (id: string) => {
+      idProjeto.value = parseInt(id)
+      qDialogVisibility.value = !qDialogVisibility.value
+    }
+    const removeEmployee = (id: string) => {
+      console.log(id)
+      idProjeto.value = parseInt(id)
+      useEmployee.removeEmployee(idProjeto.value).then(() => {
+        const index = useEmployee.$state.Employees.findIndex(x => x.id == parseInt(id))
+        if (index === -1) return;
+        useEmployee.$state.Employees.splice(index, 1)
+      })
     }
 
     return {
@@ -72,11 +70,9 @@ export default defineComponent({
       changeVisibilityDialog,
       Employees,
       idProjeto,
-      visibleColumns,
-      saveEmployee,
-      saveEditEmployee,
       editEmployee,
-      removeEmployee
+      removeEmployee,
+      visibleColumns,
     };
   },
   components: { RegisterEmployeeModal }

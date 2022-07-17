@@ -55,7 +55,7 @@ import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'registerEmploye',
-  emits: ['qDialogVisibility', 'saveEmployee', 'saveEditEmployee'],
+  emits: ['qDialogVisibility'],
   props: {
     id: {
       type: Number,
@@ -71,6 +71,7 @@ export default defineComponent({
     const jobTitle = ref('');
     const birthDate = ref((actualDate.getFullYear() + '/' + ('0' + (actualDate.getMonth() + 1)).slice(-2) + '/' + ('0' + actualDate.getDate()).slice(-2)).toString());
     const filingDate = ref((actualDate.getFullYear() + '/' + ('0' + (actualDate.getMonth() + 1)).slice(-2) + '/' + ('0' + actualDate.getDate()).slice(-2)).toString());
+    console.log(props.id)
     if (props.id) {
       const employeefind = useStoreEmployee.$state.Employees.find(p => p.id == props.id)
       name.value = employeefind?.name || '';
@@ -78,30 +79,19 @@ export default defineComponent({
       birthDate.value = employeefind?.birthDate.toString() || '';
       filingDate.value = employeefind?.filingDate.toString() || '';
     }
-
     const save = (): void => {
-      console.log(props.id)
       if (props.id > 0) {
-        emit('saveEditEmployee', {
-          id: props.id,
-          name: name,
-          jobTitle: jobTitle,
-          birthDate: birthDate,
-          filingDate: filingDate
-        })
+        useStoreEmployee.editEmployee(props.id, name.value, jobTitle.value, birthDate.value, filingDate.value)
+          ?.then(() => {
+            emit('qDialogVisibility');
+          })
       } else {
-        const id = Math.floor(Math.random() * 10) + 1;
-        emit('saveEmployee', {
-          id: id,
-          name: name,
-          jobTitle: jobTitle,
-          birthDate: birthDate,
-          filingDate: filingDate
-        })
+        useStoreEmployee.createNewEmployee(name.value, jobTitle.value, birthDate.value, filingDate.value)
+          ?.then(() => {
+            emit('qDialogVisibility')
+          })
       }
-
     }
-
     const closeDialog = () => {
       emit('qDialogVisibility')
     }

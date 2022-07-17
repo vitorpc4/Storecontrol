@@ -10,7 +10,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/employee',
-    name: 'employee',
+    name: 'Employee',
     component: employee,
   },
 ];

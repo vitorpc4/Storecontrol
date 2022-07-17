@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import IEmploye from 'src/interfaces/Employe';
+import { api } from '../boot/axios';
 
 export interface StateEmployee {
   Employees: IEmploye[];
@@ -19,22 +20,44 @@ export const useEmployeeStore = defineStore({
   },
 
   actions: {
-    createNewEmployee(item: IEmploye) {
-      if (!item) return;
-      this.Employees.push(item);
+    async fetchEmployees() {
+      try {
+        const data = await api.get('Employees');
+        this.Employees = data.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    createNewEmployee(
+      name: string,
+      jobTitle: string,
+      birthDate: string,
+      filingDate: string
+    ) {
+      if (!name) return;
+      return api.post('/Employees', {
+        name: name,
+        jobTitle: jobTitle,
+        birthDate: birthDate,
+        filingDate: filingDate,
+      });
+    },
+    editEmployee(
+      id: number,
+      name: string,
+      jobTitle: string,
+      birthDate: string,
+      filingDate: string
+    ) {
+      return api.put(`/Employees/${id}`, {
+        name: name,
+        jobTitle: jobTitle,
+        birthDate: birthDate,
+        filingDate: filingDate,
+      });
     },
     removeEmployee(id: number) {
-      const index = this.findIndexById(id);
-      if (index === -1) return;
-      this.Employees.splice(index, 1);
-    },
-    editEmployee(Employe: IEmploye) {
-      const index = this.findIndexById(Employe.id);
-      if (index === -1) return;
-      this.Employees[index] = Employe;
-    },
-    findIndexById(id: number) {
-      return this.Employees.findIndex((item) => item.id === id);
+      return api.delete(`/Employees/${id}`);
     },
   },
 });
