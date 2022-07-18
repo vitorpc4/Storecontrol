@@ -28,6 +28,7 @@
 </template>
 
 <script lang="ts">
+import { Loading, QSpinnerGears } from 'quasar'
 import { useEmployeeStore } from 'src/stores/EmployeeStore'
 import { computed, defineComponent, onMounted, ref } from 'vue'
 import RegisterEmployeeModal from './registerEmployeeModal.vue'
@@ -37,34 +38,45 @@ export default defineComponent({
     const qDialogVisibility = ref(false)
     const useEmployee = useEmployeeStore()
     const idProjeto = ref(0)
-
     const visibleColumns = ref(['name', 'jobTitle', 'birthDate', 'filingDate'])
     const Employees = computed(() => useEmployee.getEmployees)
 
+    const showLoad = (() => {
+      Loading.show({
+        spinner: QSpinnerGears,
+        message: 'Carregando'
+      })
+    })
+
     onMounted(() => {
-      useEmployee.fetchEmployees();
+      showLoad()
+      useEmployee.fetchEmployees().then(() => {
+        Loading.hide()
+      });
     })
 
     const changeVisibilityDialog = () => {
       idProjeto.value = 0
       qDialogVisibility.value = !qDialogVisibility.value
-      useEmployee.fetchEmployees();
+      showLoad()
+      useEmployee.fetchEmployees().then(() => {
+        Loading.hide()
+      })
     }
-
     const editEmployee = (id: string) => {
       idProjeto.value = parseInt(id)
       qDialogVisibility.value = !qDialogVisibility.value
     }
     const removeEmployee = (id: string) => {
-      console.log(id)
       idProjeto.value = parseInt(id)
+      showLoad()
       useEmployee.removeEmployee(idProjeto.value).then(() => {
         const index = useEmployee.$state.Employees.findIndex(x => x.id == parseInt(id))
         if (index === -1) return;
         useEmployee.$state.Employees.splice(index, 1)
+        Loading.hide()
       })
     }
-
     return {
       qDialogVisibility,
       changeVisibilityDialog,

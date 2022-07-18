@@ -2,7 +2,7 @@
   <div>
     <q-card>
       <q-card-section>
-        <div class="text-h6">Cadastrar funcionário</div>
+        <div class="text-h6">Cadastrar Target</div>
       </q-card-section>
       <q-card-section>
         <div class="q-pl-md">
@@ -45,60 +45,24 @@
     </q-card>
   </div>
 </template>
-
-<script lang="ts">
-import { useEmployeeStore } from 'src/stores/EmployeeStore';
-import { defineComponent, ref } from 'vue';
+<script>
+import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'registerEmploye',
   emits: ['qDialogVisibility'],
-  props: {
-    id: {
-      type: Number,
-      required: true
-    }
-  },
-
   setup(props, { emit }) {
-
-    const useStoreEmployee = useEmployeeStore();
-    const actualDate = new Date;
-    const name = ref('');
-    const jobTitle = ref('');
-    const birthDate = ref((actualDate.getFullYear() + '/' + ('0' + (actualDate.getMonth() + 1)).slice(-2) + '/' + ('0' + actualDate.getDate()).slice(-2)).toString());
-    const filingDate = ref((actualDate.getFullYear() + '/' + ('0' + (actualDate.getMonth() + 1)).slice(-2) + '/' + ('0' + actualDate.getDate()).slice(-2)).toString());
-    if (props.id) {
-      const employeefind = useStoreEmployee.$state.Employees.find(p => p.id == props.id)
-      name.value = employeefind?.name || '';
-      jobTitle.value = employeefind?.jobTitle || '';
-      birthDate.value = employeefind?.birthDate.toString() || '';
-      filingDate.value = employeefind?.filingDate.toString() || '';
-    }
-    const save = (): void => {
-      if (props.id > 0) {
-        useStoreEmployee.editEmployee(props.id, name.value, jobTitle.value, birthDate.value, filingDate.value)
-          ?.then(() => {
-            emit('qDialogVisibility');
-          })
-      } else {
-        useStoreEmployee.createNewEmployee(name.value, jobTitle.value, birthDate.value, filingDate.value)
-          ?.then(() => {
-            emit('qDialogVisibility')
-          })
-      }
+    const save = () => {
+      emit('qDialogVisibility')
     }
     const closeDialog = () => {
       emit('qDialogVisibility')
     }
+
     return {
-      name,
-      jobTitle,
-      birthDate,
-      filingDate,
       save,
-      closeDialog,
-    };
+      closeDialog
+
+    }
   },
-});
+})
 </script>
