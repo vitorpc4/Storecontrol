@@ -41,6 +41,7 @@ export default defineComponent({
     const visibleColumns = ref(['name', 'jobTitle', 'birthDate', 'filingDate'])
     const Employees = computed(() => useEmployee.getEmployees)
 
+
     const showLoad = (() => {
       Loading.show({
         spinner: QSpinnerGears,

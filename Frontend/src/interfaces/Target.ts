@@ -1,5 +1,7 @@
 export default interface ITarget {
-  Name: string;
-  Value: number;
-  year: Date;
+  id: number;
+  name: string;
+  value: number;
+  inicioMeta: Date;
+  fimMeta: Date;
 }

@@ -2,16 +2,15 @@
   <div class="q-pa-md">
     <div class="row justify-end q-gutter-sm">
       <div class="col-1 q-col-gutter-md">
-        <q-select borderless v-model="model" :options="options" label="Ano">
+        <q-select borderless v-model="model" :options="optsSelect" label="Ano">
         </q-select>
       </div>
       <div>
         <q-btn color="primary" icon-right="fa-regular fa-square-plus" label="Cadastrar"
           @click="changeVisibilityDialog" />
       </div>
-
     </div>
-    <q-table :rows="rows" :columns="columns" row-key="name" :visible-columns="visibleColumns">
+    <q-table :rows="Targets" :columns="columns" row-key="name">
       <template v-slot:body="props">
         <q-tr :props="props">
           <q-td v-for="col in props.cols" :key="col.name" :props="props">
@@ -25,18 +24,19 @@
         </q-tr>
       </template>
     </q-table>
+    <div class="q-pa-md q-gutter-sm">
+      <q-dialog v-model="qDialogVisibility">
+        <TargetRegister @q-dialog-visibility="changeVisibilityDialog"></TargetRegister>
+      </q-dialog>
+    </div>
   </div>
-  <div class="q-pa-md q-gutter-sm">
-    <q-dialog v-model="qDialogVisibility">
-      <TargetRegister></TargetRegister>
-    </q-dialog>
-  </div>
+
 </template>
 
 <script lang="ts">
-import { ref } from 'vue'
-import targetRegister from './targetRegister.vue'
-
+import { useTargetStore } from 'src/stores/TargetStore'
+import { computed, onMounted, ref } from 'vue'
+import TargetRegister from './targetRegister.vue'
 
 const options = [
   '2022', '2023', '2024', '2025', '2026'
@@ -46,23 +46,34 @@ const columns = [
   {
     name: 'name',
     required: true,
-    label: 'Name',
+    label: 'Nome',
     align: 'left',
-    field: 'Name',
+    field: 'name',
     sortable: true
   },
-  { name: 'values', align: 'center', label: 'values', field: 'values', sortable: true },
+  { name: 'value', align: 'center', label: 'Valor', field: 'value', sortable: true },
+  { name: 'inicioMeta', align: 'center', label: 'Inicio', field: 'inicioMeta', sortable: true },
+  { name: 'fimMeta', align: 'center', label: 'Fim', field: 'fimMeta', sortable: true }
 ]
 
-const rows = [
-  {
-    Name: 'Terno',
-    values: '15000',
-  }
-]
 
 export default {
   setup() {
+    const useTarget = useTargetStore()
+    const Targets = computed(() => useTarget.getTargets)
+    const actualYear = new Date
+    const optsSelect = [actualYear.getFullYear(), '2023']
+
+    const inicioMetaFilter = useTarget.Targets.map(y => y.inicioMeta).toString()
+
+    let year = inicioMetaFilter.split('/,')
+    console.log(year)
+
+    console.log(inicioMetaFilter)
+
+    onMounted(() => {
+      useTarget.fetchTargets()
+    })
     const qDialogVisibility = ref(false)
 
     const changeVisibilityDialog = () => {
@@ -72,12 +83,13 @@ export default {
     return {
       changeVisibilityDialog,
       qDialogVisibility,
+      Targets,
+      optsSelect,
       model: ref(null),
       columns,
-      rows,
       options
     }
   },
-  components: { targetRegister }
+  components: { TargetRegister }
 }
 </script>

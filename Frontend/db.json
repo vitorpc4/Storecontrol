@@ -8,10 +8,20 @@
       "id": 1
     }
   ],
-  "Years": [
+  "Targets": [
     {
       "id": 1,
-      "Ano": 2022
+      "name": "Olha o teste",
+      "value": 5000,
+      "inicioMeta": "2022/01/01",
+      "fimMeta": "2022/12/31"
+    },
+    {
+      "id": 2,
+      "name": "Olha o teste2",
+      "value": 5000,
+      "inicioMeta": "2023/01/01",
+      "fimMeta": "2023/12/31"
     }
   ]
 }
