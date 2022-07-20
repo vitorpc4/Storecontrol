@@ -2,7 +2,7 @@
   <div class="q-pa-md">
     <div class="row justify-end q-gutter-sm">
       <div class="col-1 q-col-gutter-md">
-        <q-select borderless v-model="model" :options="optsSelect" label="Ano">
+        <q-select borderless v-model="selectYear" @popup-hide="filterListByYear" :options="optsSelect" label="Ano">
         </q-select>
       </div>
       <div>
@@ -38,10 +38,6 @@ import { useTargetStore } from 'src/stores/TargetStore'
 import { computed, onMounted, ref } from 'vue'
 import TargetRegister from './targetRegister.vue'
 
-const options = [
-  '2022', '2023', '2024', '2025', '2026'
-]
-
 const columns = [
   {
     name: 'name',
@@ -61,15 +57,8 @@ export default {
   setup() {
     const useTarget = useTargetStore()
     const Targets = computed(() => useTarget.getTargets)
-    const actualYear = new Date
-    const optsSelect = [actualYear.getFullYear(), '2023']
-
-    const inicioMetaFilter = useTarget.Targets.map(y => y.inicioMeta).toString()
-
-    let year = inicioMetaFilter.split('/,')
-    console.log(year)
-
-    console.log(inicioMetaFilter)
+    const optsSelect = computed(() => useTarget.getYearTargets)
+    const selectYear = ref('')
 
     onMounted(() => {
       useTarget.fetchTargets()
@@ -80,14 +69,18 @@ export default {
       qDialogVisibility.value = !qDialogVisibility.value
     }
 
+    const filterListByYear = () => {
+      useTarget.fetchYearsTargets(selectYear.value)
+    }
+
     return {
       changeVisibilityDialog,
       qDialogVisibility,
       Targets,
       optsSelect,
-      model: ref(null),
+      filterListByYear,
+      selectYear,
       columns,
-      options
     }
   },
   components: { TargetRegister }
