@@ -10,7 +10,7 @@
           @click="changeVisibilityDialog" />
       </div>
     </div>
-    <q-table :rows="Targets" :columns="columns" row-key="name">
+    <q-table :rows="Targets" :filter="filter" :columns="columns" row-key="name">
       <template v-slot:body="props">
         <q-tr :props="props">
           <q-td v-for="col in props.cols" :key="col.name" :props="props">
@@ -22,6 +22,13 @@
             <q-btn round color="red" size="sm" icon="fa-solid fa-trash" @click="removeEmployee(props.row.id)" />
           </q-td>
         </q-tr>
+      </template>
+      <template v-slot:top-right>
+        <q-input borderless dense debounce="300" v-model="filter" placeholder="Search">
+          <template v-slot:append>
+            <q-icon name="search" />
+          </template>
+        </q-input>
       </template>
     </q-table>
     <div class="q-pa-md q-gutter-sm">
@@ -76,6 +83,7 @@ export default {
     return {
       changeVisibilityDialog,
       qDialogVisibility,
+      filter: ref(''),
       Targets,
       optsSelect,
       filterListByYear,
