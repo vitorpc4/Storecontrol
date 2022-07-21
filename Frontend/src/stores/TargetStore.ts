@@ -22,14 +22,16 @@ export const useTargetStore = defineStore({
     },
     getYearTargets(state) {
       const arrayYear: string[] = [];
-
       const inicioMetaFilter = state.Years;
       for (let i = 0; i < inicioMetaFilter.length; ++i) {
         const getDate = inicioMetaFilter[i];
         const year = getDate.toString().substring(0, 4);
-        arrayYear.push(year);
+        arrayYear.push('Todos', year);
       }
-      return arrayYear;
+      const arrayYearFilter = arrayYear.filter(function (elem, index, self) {
+        return index === self.indexOf(elem);
+      });
+      return arrayYearFilter;
     },
   },
   actions: {
@@ -44,11 +46,47 @@ export const useTargetStore = defineStore({
     },
     async fetchYearsTargets(year: string) {
       try {
-        const data = await api.get(`Targets?q=${year}`);
-        this.Targets = data.data;
+        if (year === 'Todos') {
+          const data = await api.get('Targets?q=');
+          this.Targets = data.data;
+        } else {
+          const data = await api.get(`Targets?q=${year}`);
+          this.Targets = data.data;
+        }
       } catch (error) {
         console.log(error);
       }
+    },
+    createNewTarget(
+      name: string,
+      value: number,
+      inicioMeta: Date,
+      fimMeta: Date
+    ) {
+      return api.post('/Targets', {
+        name: name,
+        value: value,
+        inicioMeta: inicioMeta,
+        fimMeta: fimMeta,
+      });
+    },
+    updateTargert(
+      id: number,
+      name: string,
+      value: number,
+      inicioMeta: Date,
+      fimMeta: Date
+    ) {
+      return api.put(`/Targets/${id}`, {
+        name: name,
+        value: value,
+        inicioMeta: inicioMeta,
+        fimMeta: fimMeta,
+      });
+    },
+
+    deleteTarget(id: number) {
+      return api.delete(`/Targets/${id}`);
     },
   },
 });
