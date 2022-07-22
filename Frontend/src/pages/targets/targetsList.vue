@@ -33,7 +33,7 @@
     </q-table>
     <div class="q-pa-md q-gutter-sm">
       <q-dialog v-model="qDialogVisibility">
-        <TargetRegister @q-dialog-visibility="changeVisibilityDialog"></TargetRegister>
+        <TargetRegister :id="idTarget" @q-dialog-visibility="changeVisibilityDialog"></TargetRegister>
       </q-dialog>
     </div>
   </div>
@@ -66,6 +66,7 @@ export default {
     const Targets = computed(() => useTarget.getTargets)
     const optsSelect = computed(() => useTarget.getYearTargets)
     const selectYear = ref('')
+    const idTarget = ref(0)
 
     onMounted(() => {
       useTarget.fetchTargets()
@@ -88,6 +89,7 @@ export default {
       optsSelect,
       filterListByYear,
       selectYear,
+      idTarget,
       columns,
     }
   },

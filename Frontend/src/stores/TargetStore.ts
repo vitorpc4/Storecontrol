@@ -57,31 +57,12 @@ export const useTargetStore = defineStore({
         console.log(error);
       }
     },
-    createNewTarget(
-      name: string,
-      value: number,
-      inicioMeta: Date,
-      fimMeta: Date
-    ) {
-      return api.post('/Targets', {
-        name: name,
-        value: value,
-        inicioMeta: inicioMeta,
-        fimMeta: fimMeta,
-      });
+    createNewTarget(Targets: ITarget) {
+      return api.post('/Targets', Targets);
     },
-    updateTargert(
-      id: number,
-      name: string,
-      value: number,
-      inicioMeta: Date,
-      fimMeta: Date
-    ) {
-      return api.put(`/Targets/${id}`, {
-        name: name,
-        value: value,
-        inicioMeta: inicioMeta,
-        fimMeta: fimMeta,
+    updateTarget(Targets: ITarget) {
+      return api.put(`/Targets/${Targets.id}`, {
+        Targets,
       });
     },
 

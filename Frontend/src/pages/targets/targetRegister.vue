@@ -38,29 +38,64 @@
       </q-card-section>
       <div class="row justify-end">
         <q-card-actions class="bg-white text-teal q-mr-xl">
-          <q-btn flat label="OK" @click="save" />
+          <q-btn flat label="OK" @click="save()" />
           <q-btn flat label="CANCELAR" @click="closeDialog" />
         </q-card-actions>
       </div>
     </q-card>
   </div>
 </template>
-<script>
+<script lang="ts">
 import { defineComponent, ref } from 'vue'
+import ITarget from 'src/interfaces/Target';
+import { useTargetStore } from 'src/stores/TargetStore'
 
 export default defineComponent({
   emits: ['qDialogVisibility'],
+  props: {
+    id: {
+      type: Number,
+      required: true
+    }
+  },
   setup(props, { emit }) {
-
+    const useTarget = useTargetStore()
     const actualDate = new Date;
-    const name = ref('');
-    const value = ref('');
-    const inicioMeta = ref((actualDate.getFullYear() + '/' + ('0' + (actualDate.getMonth() + 1)).slice(-2) + '/' + ('0' + actualDate.getDate()).slice(-2)).toString());
-    const fimMeta = ref((actualDate.getFullYear() + '/' + ('0' + (actualDate.getMonth() + 1)).slice(-2) + '/' + ('0' + actualDate.getDate()).slice(-2)).toString());
-
-
+    const name = ref('')
+    const value = ref(0)
+    const inicioMeta = ref((actualDate.getFullYear() + '/' + ('0' + (actualDate.getMonth() + 1)).slice(-2) + '/' + ('0' + actualDate.getDate()).slice(-2)).toString())
+    const fimMeta = ref((actualDate.getFullYear() + '/' + ('0' + (actualDate.getMonth() + 1)).slice(-2) + '/' + ('0' + actualDate.getDate()).slice(-2)).toString())
+    let Target: ITarget = {
+      id: 0,
+      name: '',
+      value: 0,
+      inicioMeta: '',
+      fimMeta: '',
+    }
     const save = () => {
-      emit('qDialogVisibility')
+      if (props.id) {
+        const targetFind = useTarget.$state.Targets.find(p => p.id == props.id)
+        if (targetFind != null)
+          Target = {
+            id: targetFind.id,
+            name: targetFind.name,
+            value: targetFind.value,
+            inicioMeta: targetFind.inicioMeta,
+            fimMeta: targetFind.fimMeta,
+          }
+        useTarget.updateTarget(Target).then(() => {
+          emit('qDialogVisibility')
+        })
+      } else {
+        Target.name = name.value
+        Target.value = value.value
+        Target.inicioMeta = inicioMeta.value
+        Target.fimMeta = fimMeta.value
+        useTarget.createNewTarget(Target).then(() => {
+          emit('qDialogVisibility')
+        })
+      }
+
     }
     const closeDialog = () => {
       emit('qDialogVisibility')
