@@ -37,5 +37,21 @@
       "inicioMeta": "2023/01/01",
       "fimMeta": "2023/12/31"
     }
+  ],
+  "TargetCloths": [
+    {
+      "id": 1,
+      "data": "2022-07-25",
+      "Targets": [
+        {
+          "id": 9,
+          "name": "TESTE",
+          "value": "150000",
+          "inicioMeta": "2023/01/01",
+          "fimMeta": "2023/12/31"
+        }
+      ],
+      "value": "10000"
+    }
   ]
 }
