@@ -17,9 +17,9 @@
             {{ col.value }}
           </q-td>
           <q-td auto-width>
-            <q-btn round color="primary" size="sm" class="q-mr-sm" @click="editEmployee(props.row.id)"
+            <q-btn round color="primary" size="sm" class="q-mr-sm" @click="editTarget(props.row.id)"
               icon="fa-solid fa-pencil" />
-            <q-btn round color="red" size="sm" icon="fa-solid fa-trash" @click="removeEmployee(props.row.id)" />
+            <q-btn round color="red" size="sm" icon="fa-solid fa-trash" @click="deleteTarget(props.row.id)" />
           </q-td>
         </q-tr>
       </template>
@@ -44,6 +44,7 @@
 import { useTargetStore } from 'src/stores/TargetStore'
 import { computed, onMounted, ref } from 'vue'
 import TargetRegister from './targetRegister.vue'
+import { Loading, QSpinnerGears } from 'quasar'
 
 const columns = [
   {
@@ -67,20 +68,54 @@ export default {
     const optsSelect = computed(() => useTarget.getYearTargets)
     const selectYear = ref('')
     const idTarget = ref(0)
-
-    onMounted(() => {
-      useTarget.fetchTargets()
-    })
     const qDialogVisibility = ref(false)
 
+    onMounted(() => {
+      showLoad()
+      useTarget.fetchTargets().then(() => {
+        Loading.hide()
+      })
+    })
+
+    const showLoad = (() => {
+      Loading.show({
+        spinner: QSpinnerGears,
+        message: 'Carregando'
+      })
+    })
+
     const changeVisibilityDialog = () => {
+      idTarget.value = 0
       qDialogVisibility.value = !qDialogVisibility.value
+      showLoad()
+      if (optsSelect.value) {
+        useTarget.fetchYearsTargets(selectYear.value).then(() => {
+          Loading.hide()
+        })
+      } else {
+        useTarget.fetchTargets().then(() => {
+          Loading.hide()
+        })
+      }
     }
 
     const filterListByYear = () => {
       useTarget.fetchYearsTargets(selectYear.value)
     }
 
+    const editTarget = (id: string) => {
+      idTarget.value = parseInt(id)
+      qDialogVisibility.value = !qDialogVisibility.value
+    }
+    const deleteTarget = (id: string) => {
+      idTarget.value = parseInt(id)
+      useTarget.deleteTarget(idTarget.value).then(() => {
+        const index = useTarget.$state.Targets.findIndex(x => x.id == idTarget.value)
+        if (index === -1) return;
+        useTarget.$state.Targets.splice(index, 1)
+        Loading.hide()
+      })
+    }
     return {
       changeVisibilityDialog,
       qDialogVisibility,
@@ -90,6 +125,8 @@ export default {
       filterListByYear,
       selectYear,
       idTarget,
+      editTarget,
+      deleteTarget,
       columns,
     }
   },

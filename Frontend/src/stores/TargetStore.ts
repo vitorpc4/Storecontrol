@@ -61,9 +61,7 @@ export const useTargetStore = defineStore({
       return api.post('/Targets', Targets);
     },
     updateTarget(Targets: ITarget) {
-      return api.put(`/Targets/${Targets.id}`, {
-        Targets,
-      });
+      return api.put(`/Targets/${Targets.id}`, Targets);
     },
 
     deleteTarget(id: number) {

@@ -10,39 +10,32 @@
   ],
   "Targets": [
     {
-      "id": 1,
-      "name": "Olha o teste",
-      "value": 5000,
-      "inicioMeta": "2022/01/01",
-      "fimMeta": "2022/12/31"
+      "id": 6,
+      "name": "TERNOS",
+      "value": "45000",
+      "inicioMeta": "2022/07/01",
+      "fimMeta": "2022/07/31"
     },
     {
-      "id": 2,
-      "name": "Olha o teste2",
-      "value": 5000,
+      "id": 7,
+      "name": "NOIVA",
+      "value": "45000",
+      "inicioMeta": "2022/07/01",
+      "fimMeta": "2022/07/31"
+    },
+    {
+      "id": 8,
+      "name": "FESTA",
+      "value": "50000",
+      "inicioMeta": "2022/07/01",
+      "fimMeta": "2022/07/31"
+    },
+    {
+      "id": 9,
+      "name": "TESTE",
+      "value": "150000",
       "inicioMeta": "2023/01/01",
       "fimMeta": "2023/12/31"
-    },
-    {
-      "id": 3,
-      "name": "Olha o teste3",
-      "value": 10000,
-      "inicioMeta": "2023/01/01",
-      "fimMeta": "2023/12/31"
-    },
-    {
-      "id": 4,
-      "name": "TESTE 5",
-      "value": "4500",
-      "inicioMeta": "2022/07/21",
-      "fimMeta": "2022/07/21"
-    },
-    {
-      "id": 5,
-      "name": "TESTE 6",
-      "value": "7500",
-      "inicioMeta": "2022/07/21",
-      "fimMeta": "2022/12/31"
     }
   ]
 }

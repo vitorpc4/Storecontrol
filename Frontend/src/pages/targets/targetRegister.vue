@@ -72,17 +72,25 @@ export default defineComponent({
       inicioMeta: '',
       fimMeta: '',
     }
+
+    if (props.id) {
+      const targetFind = useTarget.$state.Targets.find(p => p.id == props.id)
+      if (targetFind != null) {
+        name.value = targetFind.name
+        value.value = targetFind.value
+        inicioMeta.value = targetFind.inicioMeta
+        fimMeta.value = targetFind.fimMeta
+      }
+    }
+
+
     const save = () => {
       if (props.id) {
-        const targetFind = useTarget.$state.Targets.find(p => p.id == props.id)
-        if (targetFind != null)
-          Target = {
-            id: targetFind.id,
-            name: targetFind.name,
-            value: targetFind.value,
-            inicioMeta: targetFind.inicioMeta,
-            fimMeta: targetFind.fimMeta,
-          }
+        Target.id = props.id
+        Target.name = name.value
+        Target.value = value.value
+        Target.inicioMeta = inicioMeta.value
+        Target.fimMeta = fimMeta.value
         useTarget.updateTarget(Target).then(() => {
           emit('qDialogVisibility')
         })
