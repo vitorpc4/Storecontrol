@@ -16,12 +16,18 @@
         :caption="getNameDay(selectYear, selectMonth, days)">
         <q-card>
           <q-card-section>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti
-            commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste
-            eveniet doloribus ullam aliquid.
+            <div class="q-pa-md q-gutter-sm">
+              <q-btn round color="primary" icon="fa-solid fa-circle-plus" />
+            </div>
           </q-card-section>
         </q-card>
       </q-expansion-item>
+    </div>
+    <div class="q-pa-md q-gutter-sm">
+      <q-dialog v-model="qDialogVisibility">
+        <registerLaunchingClothes :id="idTarget" @q-dialog-visibility="changeVisibilityDialog">
+        </registerLaunchingClothes>
+      </q-dialog>
     </div>
   </div>
 </template>
@@ -29,6 +35,7 @@
 
 import { useTargetStore } from 'src/stores/TargetStore'
 import { computed, defineComponent, onMounted, Ref, ref } from 'vue'
+import registerLaunchingClothes from 'src/pages/LaunchingTargets/registerLaunchingClothes.vue'
 
 
 export default defineComponent({
@@ -48,7 +55,7 @@ export default defineComponent({
 
 
     const getNameofMonth = () => {
-      let d = new Date(2000, 0); // January
+      let d = new Date(2000, 0);
       for (let i = 0; i < 12; i++) {
         optionsMonths.value.push(d.toLocaleString('default', { month: 'long' }))
         d.setMonth(i + 1);
@@ -64,7 +71,6 @@ export default defineComponent({
       let monthIndex = optionsMonths.value.indexOf(selectMonth.value)
       let day = new Date(`${year}-${monthIndex + 1}-${dayNumber}`).toLocaleString('default', { weekday: 'long' })
       let dayName = day;
-
       return dayName
     }
 
@@ -72,7 +78,6 @@ export default defineComponent({
       getNumberOfMonth = optionsMonths.value.indexOf(selectMonth.value)
       numberOfMonth.value = getDaysInMonths(actualYear, getNumberOfMonth + 1)
     }
-
 
     onMounted(() => {
       selectMonth.value = actualMonth
@@ -82,8 +87,6 @@ export default defineComponent({
       getNameofMonth()
     })
 
-
-
     return {
       numberOfMonth,
       optionsMonths,
@@ -91,9 +94,10 @@ export default defineComponent({
       selectYear,
       getNameDay,
       refreshDaysMonths,
-      getNameofMonth,
       optionsYear,
+      qDialogVisibility: ref(false)
     }
   },
+  components: { registerLaunchingClothes }
 })
 </script>
