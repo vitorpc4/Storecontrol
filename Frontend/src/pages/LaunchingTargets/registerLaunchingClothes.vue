@@ -6,33 +6,14 @@
       </q-card-section>
       <q-card-section>
         <div class="q-pl-md">
-          <div class="q-gutter-lg row items-start">
-            <q-input class="col-5" v-model="name" outlined label="Nome" />
-            <q-input class="col-5" v-model="value" outlined label="valor" />
-            <q-input class="col-5" filled v-model="inicioMeta" label="Inicio Meta" mask="date" :rules="['date']">
-              <template v-slot:append>
-                <q-icon name="event" class="cursor-pointer">
-                  <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                    <q-date v-model="inicioMeta">
-                      <q-btn v-close-popup label="Close" color="primary" flat />
-                    </q-date>
-                  </q-popup-proxy>
-                </q-icon>
-              </template>
-            </q-input>
-            <q-input class="col-5" filled v-model="fimMeta" label="Fim Meta" mask="date" :rules="['date']">
-              <template v-slot:append>
-                <q-icon name="event" class="cursor-pointer">
-                  <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                    <q-date v-model="fimMeta">
-                      <div class="row items-center justify-end">
-                        <q-btn v-close-popup label="Close" color="primary" flat />
-                      </div>
-                    </q-date>
-                  </q-popup-proxy>
-                </q-icon>
-              </template>
-            </q-input>
+          <div class="row items-start q-gutter-lg">
+            <div class="col">
+              <q-select borderless v-model="targetSelected" :options="optionsTargets" label="Meses">
+              </q-select>
+            </div>
+            <div class="col">
+              <q-input v-model="value" outlined label="valor" />
+            </div>
           </div>
         </div>
       </q-card-section>
@@ -47,12 +28,36 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
+import LaunchingClothes from 'src/interfaces/LaunchingClothes';
 
 export default defineComponent({
-  setup() {
-    return {
+  emits: ['qDialogVisibility'],
+  props: {
+    data: {
+      type: String,
+      required: true
+    }
+  },
+  setup(props, { emit }) {
+    const optionsTargets = ['teste', 'teste2']
+    const targetSelected = ref('')
+    const value = ref(0);
+    console.log(props.data)
+    const save = () => {
+      console.log('save');
+    }
 
+    const closeDialog = () => {
+      emit('qDialogVisibility');
+    }
+
+    return {
+      closeDialog,
+      save,
+      optionsTargets,
+      value,
+      targetSelected
     }
   },
 })

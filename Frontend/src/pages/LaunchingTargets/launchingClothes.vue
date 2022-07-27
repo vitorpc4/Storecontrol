@@ -12,12 +12,22 @@
       </div>
     </div>
     <div v-for="(days, index) in numberOfMonth" :key="index">
-      <q-expansion-item icon="fa-solid fa-calendar-day" :label="selectMonth.toUpperCase() + ' ' + days"
-        :caption="getNameDay(selectYear, selectMonth, days)">
+      <q-expansion-item icon="fa-solid fa-calendar-day"
+        @show="loadTable(selectYear, optionsMonths.indexOf(selectMonth) + 1, days)"
+        :label="selectMonth.toUpperCase() + ' ' + days" :caption="getNameDay(selectYear, selectMonth, days)">
         <q-card>
           <q-card-section>
             <div class="q-pa-md q-gutter-sm">
-              <q-btn round color="primary" icon="fa-solid fa-circle-plus" />
+              <q-btn round color="primary"
+                @click="addNewLaunching(selectYear, optionsMonths.indexOf(selectMonth) + 1, days)"
+                icon="fa-solid fa-circle-plus" />
+            </div>
+          </q-card-section>
+        </q-card>
+        <q-card>
+          <q-card-section>
+            <div class="q-pa-md">
+              <q-table title="Metas Roupas" :rows="LaunchingClothes" row-key="name" />
             </div>
           </q-card-section>
         </q-card>
@@ -25,7 +35,7 @@
     </div>
     <div class="q-pa-md q-gutter-sm">
       <q-dialog v-model="qDialogVisibility">
-        <registerLaunchingClothes :id="idTarget" @q-dialog-visibility="changeVisibilityDialog">
+        <registerLaunchingClothes :data="dataProp" @q-dialog-visibility="changeVisibilityDialog">
         </registerLaunchingClothes>
       </q-dialog>
     </div>
@@ -36,15 +46,20 @@
 import { useTargetStore } from 'src/stores/TargetStore'
 import { computed, defineComponent, onMounted, Ref, ref } from 'vue'
 import registerLaunchingClothes from 'src/pages/LaunchingTargets/registerLaunchingClothes.vue'
+import { useLaunchingClothesStore } from 'src/stores/LaunchingClothesStore'
 
 
 export default defineComponent({
   setup() {
     const useTarget = useTargetStore()
+    const useLaunchingClothes = useLaunchingClothesStore()
     const optionsMonths: Ref<string[]> = ref([])
     const actualDate = new Date();
+    const LaunchingClothes = computed(() => useLaunchingClothes.getLaunchingClothesTable)
     let selectMonth = ref('')
     let selectYear = ref('')
+    const qDialogVisibility = ref(false)
+    const dataProp = ref('')
 
     const optionsYear = computed(() => useTarget.getYearTargets)
     const actualMonth = actualDate.toLocaleString('default', { month: 'long' });
@@ -79,6 +94,20 @@ export default defineComponent({
       numberOfMonth.value = getDaysInMonths(actualYear, getNumberOfMonth + 1)
     }
 
+    const addNewLaunching = (selectYear: string, selectMonth: number, days: number) => {
+      dataProp.value = `${selectYear}/${selectMonth}/${days}`
+      qDialogVisibility.value = !qDialogVisibility.value;
+    }
+
+    const changeVisibilityDialog = () => {
+      qDialogVisibility.value = !qDialogVisibility.value;
+    }
+    const loadTable = (selectYear: string, selectMonth: number, days: number) => {
+      const data = `${selectYear}-0${selectMonth}-${days}`
+      useLaunchingClothes.fetchYearLaunchingClothes(data);
+
+    }
+
     onMounted(() => {
       selectMonth.value = actualMonth
       selectYear.value = actualYear.toString()
@@ -92,10 +121,15 @@ export default defineComponent({
       optionsMonths,
       selectMonth,
       selectYear,
+      LaunchingClothes,
       getNameDay,
       refreshDaysMonths,
+      changeVisibilityDialog,
+      addNewLaunching,
       optionsYear,
-      qDialogVisibility: ref(false)
+      loadTable,
+      qDialogVisibility,
+      dataProp
     }
   },
   components: { registerLaunchingClothes }
