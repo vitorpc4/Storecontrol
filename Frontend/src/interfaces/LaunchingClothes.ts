@@ -2,7 +2,7 @@ import ITarget from './Target';
 
 export default interface ILaunchingClothes {
   id: number;
-  date: string;
+  data: string;
   Targets: ITarget;
   value: number;
 }

@@ -3,8 +3,8 @@
     {
       "name": "José da silva",
       "jobTitle": "Gerente",
-      "birthDate": "2022/07/16",
-      "filingDate": "2022/07/16",
+      "birthDate": "2022-07-16",
+      "filingDate": "2022-07-16",
       "id": 1
     }
   ],
@@ -13,29 +13,29 @@
       "id": 6,
       "name": "TERNOS",
       "value": "45000",
-      "inicioMeta": "2022/07/01",
-      "fimMeta": "2022/07/31"
+      "inicioMeta": "2022-07-01",
+      "fimMeta": "2022-07-31"
     },
     {
       "id": 7,
       "name": "NOIVA",
       "value": "45000",
-      "inicioMeta": "2022/07/01",
-      "fimMeta": "2022/07/31"
+      "inicioMeta": "2022-07-01",
+      "fimMeta": "2022-07-31"
     },
     {
       "id": 8,
       "name": "FESTA",
       "value": "50000",
-      "inicioMeta": "2022/07/01",
-      "fimMeta": "2022/07/31"
+      "inicioMeta": "2022-07-01",
+      "fimMeta": "2022-07-31"
     },
     {
       "id": 9,
       "name": "Terno",
       "value": "150000",
-      "inicioMeta": "2023/01/01",
-      "fimMeta": "2023/12/31"
+      "inicioMeta": "2023-01-01",
+      "fimMeta": "2023-12-31"
     }
   ],
   "TargetCloths": [
@@ -46,10 +46,94 @@
         "id": 9,
         "name": "Terno",
         "value": "150000",
-        "inicioMeta": "2023/01/01",
-        "fimMeta": "2023/12/31"
+        "inicioMeta": "2023-01-01",
+        "fimMeta": "2023-12-31"
       },
       "value": "10000"
+    },
+    {
+      "id": 2,
+      "data": "2022-07-25",
+      "Targets": {
+        "id": 9,
+        "name": "Terno",
+        "value": "150000",
+        "inicioMeta": "2023-01-01",
+        "fimMeta": "2023-12-31"
+      },
+      "value": "20000"
+    },
+    {
+      "id": 6,
+      "data": "2022-08-04",
+      "Targets": {
+        "id": 7,
+        "name": "NOIVA",
+        "value": "45000",
+        "inicioMeta": "2022-07-01",
+        "fimMeta": "2022-07-31"
+      },
+      "value": "8800"
+    },
+    {
+      "id": 7,
+      "data": "2022-08-04",
+      "Targets": {
+        "id": 6,
+        "name": "TERNOS",
+        "value": "45000",
+        "inicioMeta": "2022-07-01",
+        "fimMeta": "2022-07-31"
+      },
+      "value": "1"
+    },
+    {
+      "id": 8,
+      "data": "2022-08-05",
+      "Targets": {
+        "id": 6,
+        "name": "TERNOS",
+        "value": "45000",
+        "inicioMeta": "2022-07-01",
+        "fimMeta": "2022-07-31"
+      },
+      "value": "5555"
+    },
+    {
+      "id": 9,
+      "data": "2022-08-05",
+      "Targets": {
+        "id": 6,
+        "name": "TERNOS",
+        "value": "45000",
+        "inicioMeta": "2022-07-01",
+        "fimMeta": "2022-07-31"
+      },
+      "value": "123"
+    },
+    {
+      "id": 10,
+      "data": "2022-08-05",
+      "Targets": {
+        "id": 6,
+        "name": "TERNOS",
+        "value": "45000",
+        "inicioMeta": "2022-07-01",
+        "fimMeta": "2022-07-31"
+      },
+      "value": "200"
+    },
+    {
+      "id": 11,
+      "data": "2022-08-04",
+      "Targets": {
+        "id": 6,
+        "name": "TERNOS",
+        "value": "45000",
+        "inicioMeta": "2022-07-01",
+        "fimMeta": "2022-07-31"
+      },
+      "value": "560"
     }
   ]
 }

@@ -13,13 +13,14 @@
     </div>
     <div v-for="(days, index) in numberOfMonth" :key="index">
       <q-expansion-item icon="fa-solid fa-calendar-day"
-        @show="loadTable(selectYear, optionsMonths.indexOf(selectMonth) + 1, days)"
-        :label="selectMonth.toUpperCase() + ' ' + days" :caption="getNameDay(selectYear, selectMonth, days)">
+        @show="loadTable(selectYear, (optionsMonths.indexOf(selectMonth) + 1).toString(), days.toString())"
+        :label="selectMonth.toUpperCase() + ' ' + days" :caption="getNameDay(selectYear, selectMonth, days)"
+        group="somegroup">
         <q-card>
           <q-card-section>
             <div class="q-pa-md q-gutter-sm">
               <q-btn round color="primary"
-                @click="addNewLaunching(selectYear, optionsMonths.indexOf(selectMonth) + 1, days)"
+                @click="addNewLaunching(selectYear, (optionsMonths.indexOf(selectMonth) + 1).toString(), days.toString())"
                 icon="fa-solid fa-circle-plus" />
             </div>
           </q-card-section>
@@ -27,7 +28,21 @@
         <q-card>
           <q-card-section>
             <div class="q-pa-md">
-              <q-table title="Metas Roupas" :rows="LaunchingClothes" row-key="name" />
+              <q-table title="Metas Roupas" :rows="LaunchingClothes" row-key="name">
+                <template v-slot:body="props">
+                  <q-tr :props="props">
+                    <q-td v-for="col in props.cols" :key="col.name" :props="props">
+                      {{ col.value }}
+                    </q-td>
+                    <q-td auto-width>
+                      <q-btn round color="primary" size="sm" class="q-mr-sm" @click="editLaunchingClothes(props.row.id)"
+                        icon="fa-solid fa-pencil" />
+                      <q-btn round color="red" size="sm" icon="fa-solid fa-trash"
+                        @click="removeLaunchingClothes(props.row.id)" />
+                    </q-td>
+                  </q-tr>
+                </template>
+              </q-table>
             </div>
           </q-card-section>
         </q-card>
@@ -56,6 +71,7 @@ export default defineComponent({
     const optionsMonths: Ref<string[]> = ref([])
     const actualDate = new Date();
     const LaunchingClothes = computed(() => useLaunchingClothes.getLaunchingClothesTable)
+
     let selectMonth = ref('')
     let selectYear = ref('')
     const qDialogVisibility = ref(false)
@@ -94,17 +110,34 @@ export default defineComponent({
       numberOfMonth.value = getDaysInMonths(actualYear, getNumberOfMonth + 1)
     }
 
-    const addNewLaunching = (selectYear: string, selectMonth: number, days: number) => {
-      dataProp.value = `${selectYear}/${selectMonth}/${days}`
+    const addNewLaunching = (selectYear: string, selectMonth: string, days: string) => {
+      const day = '0' + days
+      const month = '0' + selectMonth
+      dataProp.value = `${selectYear}-${month.slice(-2)}-${day.slice(-2)}`
       qDialogVisibility.value = !qDialogVisibility.value;
     }
 
     const changeVisibilityDialog = () => {
       qDialogVisibility.value = !qDialogVisibility.value;
+      const data = dataProp.value.split('-');
+      console.log(data)
+      loadTable(data[0], data[1], data[2])
     }
-    const loadTable = (selectYear: string, selectMonth: number, days: number) => {
-      const data = `${selectYear}-0${selectMonth}-${days}`
+    const loadTable = (selectYear: string, selectMonth: string, days: string) => {
+      const day = '0' + days
+      const month = '0' + selectMonth
+      const data = `${selectYear}-${month.slice(-2)}-${day.slice(-2)}`
       useLaunchingClothes.fetchYearLaunchingClothes(data);
+    }
+
+    const editLaunchingClothes = (id: string) => {
+      console.log(id)
+    }
+
+    const removeLaunchingClothes = (id: string) => {
+      useLaunchingClothes.deleteLaunchingClothe(id);
+      const data = dataProp.value.split('-');
+      loadTable(data[0], data[1], data[2])
 
     }
 
@@ -129,7 +162,9 @@ export default defineComponent({
       optionsYear,
       loadTable,
       qDialogVisibility,
-      dataProp
+      dataProp,
+      editLaunchingClothes,
+      removeLaunchingClothes
     }
   },
   components: { registerLaunchingClothes }
